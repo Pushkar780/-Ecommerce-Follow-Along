@@ -1,0 +1,14 @@
+{
+  "name": "ecommerc",
+  "version": "1.0.0",
+  "description": "ecommerce website",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "\"Arbin\"",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
