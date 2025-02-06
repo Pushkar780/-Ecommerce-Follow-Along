@@ -1,12 +1,40 @@
-# -Ecommerce-Follow-Along
-E-Commerce Follow Along:Build a full-fledged e-commerce application using the MERN stack. Gain hands-on experience in real-world full-stack development.
+# Milestone 2: Project Structure & Login Page 🚀
 
-Learning Outcomes: 
-Understand the structure of a MERN stack project. Set up project repositories and foundational tools. 
-Master core functionalities: User authentication.
-Product and order management.
-Database schema design.
-Core Concepts REST API Design: Create endpoints for users, products, and orders.
-MongoDB Schema: Design meaningful and structured data models. 
-Authentication: Implement secure login and registration systems. 
-Backend Development: Use Node.js and Express for robust server-side APIs.
+## Overview
+
+In Milestone 2, we focused on structuring the project, setting up both the frontend and backend, and developing the Login Page for the e-commerce application.
+
+## Key Accomplishments
+
+### 📁 Project Structure
+
+- Organized the project with separate frontend/ and backend/ directories.
+
+### 🌐 Frontend Setup
+
+- Initialized a React app for building the user interface.
+- Configured _Tailwind CSS_ for utility-based styling.
+- Implemented a fully functional and styled _Login Page_.
+
+### 🛠 Backend Setup
+
+- Set up a basic _Node.js + Express_ server to prepare for future API integration.
+
+### 🎯 Learning Outcomes
+
+By completing this milestone, we learned:
+
+- How to structure a full-stack project.
+- Setting up a React application with Tailwind CSS.
+- Configuring a Node.js backend.
+- Creating a login page with basic styling and functionality.
+
+## ✅ Submission Details
+
+- Code is pushed to the _GitHub repository_ created in Milestone 1.
+- The repository includes:
+  - _Proper folder structure_ (frontend & backend).
+  - _Functional Login Page_.
+  - _Updated README_ summarizing the progress.
+
+
