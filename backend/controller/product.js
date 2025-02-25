@@ -136,7 +136,7 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
             return res.status(404).json({ error: 'Product not found.' });
         }
 
-        let updatedImages = existingProduct.images;     
+        let updatedImages = existingProduct.images;
         if (req.files && req.files.length > 0) {
             updatedImages = req.files.map((file) => {
                 return `/products/${path.basename(file.path)}`;
@@ -174,6 +174,23 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
     } catch (err) {
         console.error('Server error:', err);
         res.status(500).json({ error: 'Server error. Could not update product.' });
+    }
+});
+
+router.delete('/delete-product/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
+            return res.status(404).json({ error: 'Product not found.' });
+        }
+
+        await existingProduct.deleteOne();
+        res.status(200).json({ message: '✅ Product deleted successfully' });
+    } catch (err) {
+        console.error('Server error:', err);
+        res.status(500).json({ error: 'Server error. Could not delete product.' });
     }
 });
 
