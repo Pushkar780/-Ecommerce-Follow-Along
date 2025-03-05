@@ -1,6 +1,43 @@
 # **E-commerce Follow-Along Project 🚀**
 
+Milestone 15: Navbar Component 🚀
+✅ Creating the Navbar Component
+Designed a Nav component with links to key pages:
+Home
+My Products
+Add Product
+Cart
+✅ Making the Navbar Responsive
+Ensured the Navbar adapts to all screen sizes.
+Implemented a mobile-friendly design with a collapsible menu.
+✅ Reusing the Navbar Across Pages
+Added the Nav component to all application pages.
+Ensured smooth and intuitive navigation between different sections.
+
+
+Milestone 14: Deleting Products 🚀
+✅ Backend Delete Endpoint
+Created an endpoint to delete a product by its ID from MongoDB.
+Implemented logic to find the product and remove it from the database.
+✅ Frontend Delete Button
+Added a Delete button to each product card.
+When clicked, it sends the product ID to the server endpoint for deletion.
+✅ Updating UI After Deletion
+Ensured the product is removed from the frontend dynamically after successful deletion.
+Implemented confirmation prompts before deletion for better user experience.
+
+
 ---
+Milestone 13: Editing Uploaded Products 🚀
+✅ Backend Update Endpoint
+Created an endpoint to receive and update product details in MongoDB.
+Implemented logic to find the product by its ID and modify the existing data.
+✅ Frontend Edit Button
+Added an Edit button to each product card.
+When clicked, it fetches the product details and auto-fills the form.
+✅ Updating Product Data
+Allowed users to modify product details directly within the form.
+Implemented a Save Changes feature to update product details in the database.
 
 # Milestone 12: My Products Page 📦
 
