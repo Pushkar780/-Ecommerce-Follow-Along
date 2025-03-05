@@ -5,6 +5,7 @@ import Home from "../src/pages/Home.jsx"
 import CreateProduct from "../src/pages/createProduct.jsx"
 import MyProducts from "../src/pages/myProducts.jsx";
 import Cart from "./pages/cart.jsx";
+import ProductDetails from "./pages/productDetails.jsx";
 export
 {
     LoginPage,
@@ -13,6 +14,7 @@ export
     Home,
     CreateProduct,
     MyProducts,
-    Cart
+    Cart,
+    ProductDetails
 
 }
