@@ -7,7 +7,7 @@ const Cart = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/v2/product/cartproducts?email=${'ashupatil1357@gmail.com'}`)
+        fetch(`http://localhost:8000/api/v2/product/cartproducts?email=${'pushkarjain350@gmail.com'}`)
           .then((res) => {
             if (!res.ok) {
               throw new Error(`HTTP error! status: ${res.status}`);
