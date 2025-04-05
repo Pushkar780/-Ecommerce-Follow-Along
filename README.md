@@ -1,10 +1,14 @@
 # **E-commerce Follow-Along Project 🚀**
-Milestone 26: Fetch User Orders API 
-=>Order Retrieval Endpoint
+Milestone 27: My Orders Page :
+=>My Orders Page
 
-Created an endpoint to receive the user’s email.
-Retrieved the _id of the user using their email.
-=>Fetch & Response
+Created a "My Orders" page to display all user orders.
+=>API Integration
 
-Used the _id to fetch all orders of the user from the database.
-Sent all user orders in the API response.
+Sent a GET request to the my-orders endpoint.
+Passed the user's email to fetch all orders.
+=>UI & Navigation
+
+Displayed all user orders on the page.
+Added "My Orders" to the navbar for easy access.
+Now, users can easily view their order history! 
