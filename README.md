@@ -1,14 +1,13 @@
 # **E-commerce Follow-Along Project 🚀**
-Milestone 27: My Orders Page :
 =>My Orders Page
 
-Created a "My Orders" page to display all user orders.
-=>API Integration
+Added a Cancel Order button for active orders.
+Hidden the button for canceled orders.
+=>API Implementation
 
-Sent a GET request to the my-orders endpoint.
-Passed the user's email to fetch all orders.
-=>UI & Navigation
+Created an endpoint to cancel orders.
+Updated order status to canceled in the database.
+=>UI Integration
 
-Displayed all user orders on the page.
-Added "My Orders" to the navbar for easy access.
-Now, users can easily view their order history! 
+Sent API request on button click.
+Updated UI after successful cancellation.
