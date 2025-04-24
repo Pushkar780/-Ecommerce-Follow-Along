@@ -1,48 +1,39 @@
-// backend/controllers/product.js
-
+// backend/routes/product.js
 const express = require('express');
 const Product = require('../model/product');
 const User = require('../model/user');
 const router = express.Router();
-const { pupload } = require("../multer");
+const { pupload } = require("../multer"); // your custom multer config
 const path = require('path');
 const mongoose = require('mongoose');
+const { isAuthenticatedUser } = require('../middleware/auth');
 
 const validateProductData = (data) => {
     const errors = [];
-
     if (!data.name) errors.push('Product name is required');
     if (!data.description) errors.push('Product description is required');
     if (!data.category) errors.push('Product category is required');
     if (!data.price || isNaN(data.price) || Number(data.price) <= 0) errors.push('Valid product price is required');
     if (!data.stock || isNaN(data.stock) || Number(data.stock) < 0) errors.push('Valid product stock is required');
     if (!data.email) errors.push('Email is required');
-
     return errors;
 };
 
-// Route: Create a new product
-router.post('/create-product', pupload.array('images', 10), async (req, res) => {
+// 1) Create a product
+router.post('/create-product', isAuthenticatedUser, pupload.array('images', 10), async (req, res) => {
     console.log("🛒 Creating product");
     const { name, description, category, tags, price, stock, email } = req.body;
 
-    // Map uploaded files to accessible URLs
-    const images = req.files.map((file) => {
-        return `/products/${path.basename(file.path)}`;
-    });
-
-    // Validate input data
+    const images = req.files.map((file) => `/products/${path.basename(file.path)}`);
     const validationErrors = validateProductData({ name, description, category, price, stock, email });
     if (validationErrors.length > 0) {
         return res.status(400).json({ errors: validationErrors });
     }
-
     if (images.length === 0) {
         return res.status(400).json({ error: 'At least one image is required' });
     }
 
     try {
-        // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ error: 'Email does not exist in the users database' });
@@ -70,14 +61,13 @@ router.post('/create-product', pupload.array('images', 10), async (req, res) => 
     }
 });
 
-router.get('/get-products', async (req, res) => {
+// 2) Get all products
+router.get('/get-products', isAuthenticatedUser, async (req, res) => {
     try {
         const products = await Product.find();
         const productsWithFullImageUrl = products.map(product => {
             if (product.images && product.images.length > 0) {
-                product.images = product.images.map(imagePath => {
-                    return imagePath;
-                });
+                product.images = product.images.map(imagePath => imagePath);
             }
             return product;
         });
@@ -88,16 +78,15 @@ router.get('/get-products', async (req, res) => {
     }
 });
 
-router.get('/my-products', async (req, res) => {
+// 3) Get my products
+router.get('/my-products', isAuthenticatedUser, async (req, res) => {
     const { email } = req.query;
     try {
         const products = await Product.find({ email });
         console.log("Product: ", products);
         const productsWithFullImageUrl = products.map(product => {
             if (product.images && product.images.length > 0) {
-                product.images = product.images.map(imagePath => {
-                    return imagePath;
-                });
+                product.images = product.images.map(imagePath => imagePath);
             }
             return product;
         });
@@ -106,11 +95,10 @@ router.get('/my-products', async (req, res) => {
         console.error(' Server error:', err);
         res.status(500).json({ error: 'Server error. Could not fetch products.' });
     }
-}
-);
+});
 
-
-router.get('/product/:id', async (req, res) => {
+// 4) Get product by ID
+router.get('/product/:id', isAuthenticatedUser, async (req, res) => {
     console.log("Fetching product");
     const { id } = req.params;
     try {
@@ -126,7 +114,8 @@ router.get('/product/:id', async (req, res) => {
     }
 });
 
-router.put('/update-product/:id', pupload.array('images', 10), async (req, res) => {
+// 5) Update product
+router.put('/update-product/:id', isAuthenticatedUser, pupload.array('images', 10), async (req, res) => {
     const { id } = req.params;
     const { name, description, category, tags, price, stock, email } = req.body;
 
@@ -138,9 +127,7 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
 
         let updatedImages = existingProduct.images;
         if (req.files && req.files.length > 0) {
-            updatedImages = req.files.map((file) => {
-                return `/products/${path.basename(file.path)}`;
-            });
+            updatedImages = req.files.map((file) => `/products/${path.basename(file.path)}`);
         }
 
         const validationErrors = validateProductData({
@@ -151,7 +138,6 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
             stock,
             email,
         });
-
         if (validationErrors.length > 0) {
             return res.status(400).json({ errors: validationErrors });
         }
@@ -166,7 +152,6 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
         existingProduct.images = updatedImages;
 
         await existingProduct.save();
-
         res.status(200).json({
             message: '✅ Product updated successfully',
             product: existingProduct,
@@ -177,15 +162,14 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
     }
 });
 
-router.delete('/delete-product/:id', async (req, res) => {
+// 6) Delete product
+router.delete('/delete-product/:id', isAuthenticatedUser, async (req, res) => {
     const { id } = req.params;
-
     try {
         const existingProduct = await Product.findById(id);
         if (!existingProduct) {
             return res.status(404).json({ error: 'Product not found.' });
         }
-
         await existingProduct.deleteOne();
         res.status(200).json({ message: '✅ Product deleted successfully' });
     } catch (err) {
@@ -194,20 +178,18 @@ router.delete('/delete-product/:id', async (req, res) => {
     }
 });
 
-
-router.post('/cart', async (req, res) => {
+// 7) Add to cart
+router.post('/cart', isAuthenticatedUser, async (req, res) => {
     try {
         const { userId, productId, quantity } = req.body;
-        const email = userId;
+        const email = userId; // userId is the email, apparently
 
         if (!email) {
             return res.status(400).json({ message: 'Email is required' });
         }
-
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({ message: 'Invalid productId' });
         }
-
         if (!quantity || quantity < 1) {
             return res.status(400).json({ message: 'Quantity must be at least 1' });
         }
@@ -231,7 +213,6 @@ router.post('/cart', async (req, res) => {
         } else {
             user.cart.push({ productId, quantity });
         }
-
         await user.save();
 
         res.status(200).json({
@@ -244,10 +225,8 @@ router.post('/cart', async (req, res) => {
     }
 });
 
-
-
-// GET cart details endpoint
-router.get('/cartproducts', async (req, res) => {
+// 8) Get cart details
+router.get('/cartproducts', isAuthenticatedUser, async (req, res) => {
     try {
         const { email } = req.query;
         if (!email) {
@@ -270,7 +249,8 @@ router.get('/cartproducts', async (req, res) => {
     }
 });
 
-router.put('/cartproduct/quantity', async (req, res) => {
+// 9) Update cart quantity
+router.put('/cartproduct/quantity', isAuthenticatedUser, async (req, res) => {
     const { email, productId, quantity } = req.body;
     console.log("Updating cart product quantity");
 
@@ -301,6 +281,5 @@ router.put('/cartproduct/quantity', async (req, res) => {
         res.status(500).json({ error: 'Server Error' });
     }
 });
-
 
 module.exports = router;

@@ -4,11 +4,14 @@ import styles from "../../styles/styles";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setemail } from "../../store/userActions";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+
+// Ensure axios sends cookies with requests
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -18,9 +21,11 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:8000/api/v2/user/login", { email, password });
       console.log(response.data);
-      // Dispatch action to store email in Redux state
+
+      // Dispatch email to Redux state (token is now handled via cookies)
       dispatch(setemail(email));
-      // Redirect to profile page after successful login
+
+      // Redirect to home or profile page after successful login
       navigate("/");
     } catch (error) {
       console.error("There was an error logging in!", error);

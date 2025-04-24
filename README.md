@@ -1,9 +1,17 @@
-Milestone 32: Using Dispatch and useSelector for Storing Mail in Global State 
-=> Dispatch Method for Storing Mail in Global State
+Milestone 34: Validating JWT Token from Cookie 🔐
+=> Extracting JWT from Cookie
 
-Implemented Dispatch method on the Login page to store the user email in the global state.
-Ensured that the email is properly stored using Redux to manage the state across pages.
-=> Accessing Mail in Other Pages
+Retrieved the JWT token from the browser’s cookie storage.
+Sent the token to the backend with each request.
+=> JWT Token Validation
 
-Utilized useSelector to access the stored email in the global state on all other pages.
-Ensured seamless usage of the email across various components without prop drilling.
+Created a middleware in the backend to validate the incoming JWT token.
+Used verify() method from jsonwebtoken to decode and verify token authenticity.
+=> Route Protection
+
+Applied the JWT validation middleware to secure routes.
+Ensured only authenticated users can access protected pages.
+=> Benefits
+
+Enhances app security by verifying token on every request.
+Prevents unauthorized access to sensitive routes and pages.
