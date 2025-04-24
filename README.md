@@ -1,14 +1,9 @@
-# **E-commerce Follow-Along Project 🚀**
-Milestone 24: Order Summary Page 
-Display Ordered Products
+Milestone 32: Using Dispatch and useSelector for Storing Mail in Global State 
+=> Dispatch Method for Storing Mail in Global State
 
-Listed all products the user is ordering.
-Address Confirmation
+Implemented Dispatch method on the Login page to store the user email in the global state.
+Ensured that the email is properly stored using Redux to manage the state across pages.
+=> Accessing Mail in Other Pages
 
-Displayed the selected delivery address.
-Cart Value Calculation
-
-Showed the total value of the cart.
-Place Order Button
-
-Added a "Place Order" button at the bottom for final confirmation.
+Utilized useSelector to access the stored email in the global state on all other pages.
+Ensured seamless usage of the email across various components without prop drilling.

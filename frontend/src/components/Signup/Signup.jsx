@@ -3,7 +3,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
-import axios from "axios";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setemail } from "../../store/userActions";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +23,7 @@ const Signup = () => {
     }
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -32,18 +35,16 @@ const Signup = () => {
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
-        Accept: "any",
+        "Accept": "any",
       },
     };
 
-    axios
-      .post("http://localhost:8000/api/v2/user/create-user", newForm, config)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    axios.post("http://localhost:8000/api/v2/user/create-user", newForm, config)
+    .then((res) => {
+      console.log(res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
