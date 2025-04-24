@@ -7,7 +7,10 @@ const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken"); // Import JSON Web Token
 require("dotenv").config();
+
+JWT_SECRET = "your_strong_secret_key"
 
 
 router.post("/create-user", upload.single("file"), catchAsyncErrors(async (req, res, next) => {
@@ -47,6 +50,7 @@ router.post("/create-user", upload.single("file"), catchAsyncErrors(async (req, 
     res.status(201).json({ success: true, user });
 }));
 
+// In your login route (e.g., routes/user.js)
 router.post("/login", catchAsyncErrors(async (req, res, next) => {
     console.log("Logging in user...");
     const { email, password } = req.body;
@@ -58,16 +62,32 @@ router.post("/login", catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
     const isPasswordMatched = await bcrypt.compare(password, user.password);
-    console.log("At Auth", "Password: ", password, "Hash: ", user.password);
     if (!isPasswordMatched) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
-    user.password = undefined;
+
+    // Generate JWT token
+    const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_SECRET || "your_jwt_secret",
+        { expiresIn: "1h" }
+    );
+
+    // Set token in an HttpOnly cookie
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // use true in production
+        sameSite: "Strict",
+        maxAge: 3600000, // 1 hour
+    });
+
+    user.password = undefined; // Remove password from response
     res.status(200).json({
         success: true,
         user,
     });
 }));
+
 
 router.get("/profile", catchAsyncErrors(async (req, res, next) => {
     const { email } = req.query;
@@ -117,7 +137,6 @@ router.post("/add-address", catchAsyncErrors(async (req, res, next) => {
     });
 }));
 
-
 router.get("/addresses", catchAsyncErrors(async (req, res, next) => {
     const { email } = req.query;
     if (!email) {
@@ -131,8 +150,6 @@ router.get("/addresses", catchAsyncErrors(async (req, res, next) => {
         success: true,
         addresses: user.addresses,
     });
-}
-));
-
+}));
 
 module.exports = router;
