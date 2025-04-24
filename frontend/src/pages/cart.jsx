@@ -2,34 +2,25 @@ import React, { useState, useEffect } from 'react';
 import CartProduct from '../components/CartProduct';
 import Nav from '../components/nav';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Import useSelector
+import { useSelector } from 'react-redux';
+import axios from '../axiosConfig'; // <--- use your configured axios
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-
-  // Get the email from Redux state
   const email = useSelector((state) => state.user.email);
 
   useEffect(() => {
-    // Only fetch if email is available
     if (!email) return;
-
-    fetch(`http://localhost:8000/api/v2/product/cartproducts?email=${email}`)
+    // Use axios with credentials
+    axios.get(`/api/v2/product/cartproducts?email=${email}`)
       .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
         setProducts(
-          data.cart.map(product => ({
-            quantity: product['quantity'],
-            ...product['productId']
+          res.data.cart.map(product => ({
+            quantity: product.quantity,
+            ...product.productId,
           }))
         );
-        console.log("Products fetched:", data.cart);
       })
       .catch((err) => {
         console.error("Error fetching products:", err);
@@ -37,7 +28,7 @@ const Cart = () => {
   }, [email]);
 
   const handlePlaceOrder = () => {
-    navigate('/select-address'); // Navigate to the Select Address page
+    navigate('/select-address');
   };
 
   return (
@@ -53,7 +44,6 @@ const Cart = () => {
               <CartProduct key={product._id} {...product} />
             ))}
           </div>
-          {/* Place Order Button */}
           <div className='w-full p-4 flex justify-end'>
             <button
               onClick={handlePlaceOrder}
