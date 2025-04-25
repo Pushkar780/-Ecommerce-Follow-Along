@@ -1,4 +1,4 @@
-Milestone 34: Validating JWT Token from Cookie 🔐
+Milestone 34: Validating JWT Token from Cookie 
 => Extracting JWT from Cookie
 
 Retrieved the JWT token from the browser’s cookie storage.
